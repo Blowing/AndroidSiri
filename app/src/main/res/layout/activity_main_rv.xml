@@ -4,35 +4,65 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:orientation="vertical"
         tools:context=".MainRvActivity">
 
-    <android.support.v4.widget.NestedScrollView
-            android:id="@+id/net_scroll"
-            android:layout_width="match_parent"
-            android:fillViewport="true"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+        <android.support.v4.widget.NestedScrollView
+                android:id="@+id/net_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+
+                >
+            <LinearLayout
+                    android:id="@+id/scroll_layout"
+                    android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+
+                <RelativeLayout
+                        android:id="@+id/bottom_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimaryDark"/>
+
+
+                <View
+                        android:id="@+id/divide_view"
+                        android:layout_width="match_parent"
+                      android:layout_height="120dp"
+                      android:background="@color/colorAccent"/>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+        <RelativeLayout
+                android:id="@+id/guid_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
             <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv"
+                    android:id="@+id/guide_rv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-            </android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
-            <RelativeLayout
-                    android:id="@+id/bottom_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimaryDark"/>
 
-        </LinearLayout>
+    </RelativeLayout>
 
-    </android.support.v4.widget.NestedScrollView>
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="50dp">
 
         <Button android:id="@+id/btn_add_text"
                 android:layout_width="wrap_content"
@@ -50,6 +80,11 @@
                 android:layout_height="wrap_content"
                 android:text="restart"
                 android:textAllCaps="false"/>
+        <Button android:id="@+id/btn_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="guide"/>
 
     </LinearLayout>
 </LinearLayout>
