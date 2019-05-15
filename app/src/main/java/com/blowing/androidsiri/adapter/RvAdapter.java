@@ -1,4 +1,4 @@
-package com.blowing.androidsiri;
+package com.blowing.androidsiri.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import com.blowing.androidsiri.FragmentNew;
 
 /**
  * Created by wujie
