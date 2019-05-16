@@ -1,9 +1,7 @@
 package com.blowing.androidsiri;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,14 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.BaseAdapter;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import com.blowing.androidsiri.adapter.SiriAdapter;
 
 import java.util.ArrayList;
@@ -37,10 +32,6 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
 
     private RelativeLayout guideLayout;
 
-    private LinearLayout scrollLayout;
-
-    private MyListView myListView;
-
     private View dividView;
 
     private SiriAdapter siriAdapter;
@@ -55,9 +46,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
     private final String text = "text";
     private int nestHeight = 0;
 
-
     private boolean iszhiding = false;
-    private boolean isAdd;
 
     private boolean isStart = true;
     private boolean isText;
@@ -66,12 +55,8 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
 
     private float y1;
     private float y2;
-    private boolean isShowLast;
-    private TranslateAnimation mShowAnimation;
-    private TranslateAnimation mShowAnimation1;
-    private TranslateAnimation mHideAnimation;
-    private TranslateAnimation mHideAnimation1;
 
+    private Animation bottomInAnimation, bottomOutAnimation, topInAnimation, topOutAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +65,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         initView();
         initRv();
         initGuideRv();
+        initAnimation();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -87,7 +73,6 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         nestedScrollView = findViewById(R.id.net_scroll);
         bottomLayout = findViewById(R.id.bottom_layout);
         guideLayout  = findViewById(R.id.guid_layout);
-        scrollLayout = findViewById(R.id.scroll_layout);
         dividView = findViewById(R.id.divide_view);
         recyclerView = findViewById(R.id.rv);
         findViewById(R.id.btn_add_image).setOnClickListener(this);
@@ -95,23 +80,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_add_restart).setOnClickListener(this);
         findViewById(R.id.btn_guide).setOnClickListener(this);
 
-        mShowAnimation1 = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                -1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        mShowAnimation1.setDuration(500);
 
-         mShowAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        mShowAnimation.setDuration(500);
-
-        mHideAnimation1 = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f);
-        mHideAnimation1.setDuration(500);
-
-         mHideAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 1.0f);
-        mHideAnimation.setDuration(500);
         nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -145,10 +114,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) && !nestedScrollView.canScrollVertically(1)) {
                         Log.i("wujie", "BOTTOM SCROLL");
-                        guideLayout.startAnimation(mShowAnimation);
-                        guideLayout.setVisibility(View.VISIBLE);
-                        nestedScrollView.startAnimation(mHideAnimation1);
-                        nestedScrollView.setVisibility(View.GONE);
+                        showGuidePage();
                     }
 
 
@@ -232,8 +198,8 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         guideRv.setAdapter(guideAdapter);
 
 
-
         guideRv.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -245,17 +211,21 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
                     //当手指离开的时候
                     y2 = event.getY();
                     if (y2 - y1 > 50 && !guideRv.canScrollVertically(-1)) {
-                        guideLayout.startAnimation(mHideAnimation);
-                        guideLayout.setVisibility(View.GONE);
-                       nestedScrollView.startAnimation(mShowAnimation1);
-                        nestedScrollView.setVisibility(View.VISIBLE);
-
+                        showContentPage();
+                        nestedScrollView.smoothScrollTo(0, dividView.getTop() - nestHeight);
                     }
 
                 }
                 return false;
             }
         });
+    }
+
+    private void initAnimation() {
+        bottomInAnimation = AnimationUtils.loadAnimation(this, R.anim.speech_bottom_in);
+        bottomOutAnimation = AnimationUtils.loadAnimation(this, R.anim.speech_bottom_out);
+        topInAnimation = AnimationUtils.loadAnimation(this, R.anim.speech_top_in);
+        topOutAnimation = AnimationUtils.loadAnimation(this, R.anim.speech_top_out);
     }
 
     @Override
@@ -271,97 +241,35 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_add_restart:
                 iszhiding = true;
-
+                showContentPage();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         bottomLayout.setVisibility(View.VISIBLE);
                         bottomLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                                 nestHeight));
-//                        nestedScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-
                     }
                 });
 
                 break;
             case R.id.btn_guide:
-                nestedScrollView.setVisibility(View.GONE);
-                guideLayout.setVisibility(View.VISIBLE);
+                showGuidePage();
 
                 break;
         }
     }
 
+    private void showGuidePage() {
+        nestedScrollView.startAnimation(topOutAnimation);
+        nestedScrollView.setVisibility(View.GONE);
+        guideLayout.startAnimation(bottomInAnimation);
+        guideLayout.setVisibility(View.VISIBLE);
+    }
 
-
-    private static class MyAdapter extends BaseAdapter {
-
-        private Context mContext;
-        private int mType;
-        private FragmentManager fragmentManager;
-        private int count;
-
-        public void setmCount(int mCount) {
-            this.mCount = mCount;
-            count++;
-            notifyDataSetChanged();
-        }
-
-        private int mCount;
-
-        MyAdapter(Context context, int type, int count, FragmentManager fragmentManager) {
-            mContext = context;
-            mType = type;
-            mCount = count;
-            this.fragmentManager = fragmentManager;
-        }
-
-
-
-        @Override
-        public int getCount() {
-            return mCount;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView = new TextView(mContext);
-            if (mType == 1) {
-//                textView.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
-//                textView.setText("listview " + mType + " " + position);
-            } else {
-                Log.i("wuwu", position+"");
-//                LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-//
-//                return LayoutInflater.from(mContext).inflate(R.layout.item_layout, parent,false);
-//                FrameLayout frameLayout = new FrameLayout(parent.getContext());
-//                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-//                        300);
-//                frameLayout.setLayoutParams(layoutParams);
-//                frameLayout.setId(position);
-//                FragmentNew fragmentNew = new FragmentNew();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.add(frameLayout.getId(), fragmentNew);
-//                fragmentTransaction.commit();
-//                return frameLayout;
-//                textView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-//                textView.setText("listview " +  count+"" + position);
-            }
-            textView.setText("listview " + mType + " " + position);
-            convertView = textView;
-            return convertView;
-        }
-
-
+    private void showContentPage() {
+        guideLayout.startAnimation(bottomOutAnimation);
+        guideLayout.setVisibility(View.GONE);
+        nestedScrollView.startAnimation(topInAnimation);
+        nestedScrollView.setVisibility(View.VISIBLE);
     }
 }
