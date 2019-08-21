@@ -1,6 +1,7 @@
 package com.blowing.androidsiri;
 
 import android.annotation.SuppressLint;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import com.blowing.androidsiri.adapter.SiriAdapter;
@@ -58,6 +60,10 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
 
     private Animation bottomInAnimation, bottomOutAnimation, topInAnimation, topOutAnimation;
 
+
+
+    private WebView webView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +72,51 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         initRv();
         initGuideRv();
         initAnimation();
+
+
+        webView = findViewById(R.id.web_view);
+        webView.setBackgroundColor(0);
+        webView.loadUrl("file:///android_asset/web/test.html");
+
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        webView.getBackground().setAlpha(0);
+    }
+
+    private int computeMaxStringWidth(int currentMax, String[] strings, Paint p) {
+        float maxWidthF = 0.0f;
+        int len = strings.length;
+        for (int i = 0; i < len; i++) {
+            float width = p.measureText(strings[i]);
+            maxWidthF = Math.max(width, maxWidthF);
+        }
+        int maxWidth = (int) (maxWidthF + 0.5);
+        if (maxWidth < currentMax) {
+            maxWidth = currentMax;
+        }
+        return maxWidth;
+    }
+    private int computeMaxStringWidth(String content) {
+        float maxWidthF = 0.0f;
+        Paint p = new Paint();
+        p.setTextSize(getResources().getDimensionPixelSize(R.dimen.size));
+        Log.i("wujie", "textSize" + getResources().getDimensionPixelSize(R.dimen.size));
+            float width = p.measureText(content);
+            maxWidthF = Math.max(width, maxWidthF);
+
+        int maxWidth = (int) (maxWidthF + 0.5);
+        if (maxWidth < 0) {
+            maxWidth = 0;
+        }
+        return maxWidth;
+
+
+    }
     @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         nestedScrollView = findViewById(R.id.net_scroll);
@@ -80,7 +129,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_add_restart).setOnClickListener(this);
         findViewById(R.id.btn_guide).setOnClickListener(this);
 
-
+        CMPStatusBarUtiles.setStatusBarBackgroundColor(this, R.color.colorPrimaryDark);
         nestedScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -102,7 +151,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
                     iszhiding = false;
                     nestedScrollView.smoothScrollTo(0, bottomLayout.getTop());
                     isText = true;
-                    siriAdapter.addItem(text);
+                   siriAdapter.addItem(text);
                     currentPosition = siriAdapter.getItemCount() -1 ;
                 }
             }
@@ -232,8 +281,13 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_image:
-                siriAdapter.addItem(image);
-                isText = true;
+
+                    siriAdapter.addItem(image);
+                    isText = true;
+
+
+
+
                 break;
             case R.id.btn_add_text:
                 isText = true;
@@ -241,7 +295,7 @@ public class MainRvActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btn_add_restart:
                 iszhiding = true;
-                showContentPage();
+//                showContentPage();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

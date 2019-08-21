@@ -9,11 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-
-import java.util.Random;
 
 /**
  * Created by wujie
@@ -27,10 +26,12 @@ public class FragmentNew extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View converView = inflater.inflate(R.layout.fragment_new, container,false);
-        btnshow = converView.findViewById(R.id.btn_show);
-        btnshow.setText(new Random().nextInt(100)+"");
+//        btnshow = converView.findViewById(R.id.btn_show);
+
         webView = converView.findViewById(R.id.web_view);
         webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl("http://www.baidu.com");
         return converView;
     }

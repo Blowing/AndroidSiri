@@ -1,5 +1,6 @@
 package com.blowing.androidsiri.adapter;
 
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.blowing.androidsiri.FragmentNew;
+import com.blowing.androidsiri.R;
+
+
 
 /**
  * Created by wujie
@@ -27,16 +31,21 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyHolder> {
         fragmentManager = activity.getSupportFragmentManager();
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         FrameLayout frameLayout = new FrameLayout(activity);
         FrameLayout.LayoutParams F = new FrameLayout.LayoutParams(FrameLayout
-                .LayoutParams.MATCH_PARENT,600);
+                .LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT);
         frameLayout.setLayoutParams(F);
-        frameLayout.setId(id--);
-//                convertView  = LayoutInflater.from(mContext).inflate(R.layout
-//                        .item_speech_webview,parent, false);
+        frameLayout.setId(R.id.fragment_id);
+//              View  convertView  = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout
+//                        .item_fragment,viewGroup, false);
         return new MyHolder(frameLayout);
 
     }
@@ -47,25 +56,33 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.MyHolder> {
     }
 
     @Override
-    public void onViewAttachedToWindow(@NonNull MyHolder holder) {
+    public void onViewAttachedToWindow(@NonNull final MyHolder holder) {
         super.onViewAttachedToWindow(holder);
-        FragmentNew fragmentNew = new FragmentNew();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(holder.webView.getId(), fragmentNew);
-        fragmentTransaction.commit();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FragmentNew fragmentNew = new FragmentNew();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(holder.webView.getId(), fragmentNew);
+                fragmentTransaction.commit();
+            }
+        }, 50);
+
+
     }
 
     @Override
     public int getItemCount() {
-        return count;
+        return 1;
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
 
         private FrameLayout webView;
-        public MyHolder(@NonNull View itemView) {
+         MyHolder(@NonNull View itemView) {
             super(itemView);
             webView = (FrameLayout) itemView;
+//            webView = itemView.findViewById(R.id.fragment_layout);
         }
     }
 
