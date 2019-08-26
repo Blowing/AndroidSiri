@@ -2,12 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:orientation="vertical"
               android:background="@color/colorAccent"
 >
 
+    <Button
+            android:id="@+id/btn_footer"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="点击我呀，来呀"/>
     <android.support.v7.widget.RecyclerView
 
             android:id="@+id/rv_footer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
 </LinearLayout>

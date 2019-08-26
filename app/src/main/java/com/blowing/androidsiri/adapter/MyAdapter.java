@@ -1,16 +1,20 @@
 package com.blowing.androidsiri.adapter;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.TextView;
 import com.blowing.androidsiri.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by wujie
@@ -19,7 +23,13 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     private List<String> list = new ArrayList<>();
+    int size;
 
+    public MyAdapter() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            size = ThreadLocalRandom.current().nextInt(10,50);
+        }
+    }
 
 
     public void addItem(String ss) {
@@ -62,23 +72,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public int getItemCount() {
-        return 50;
-//        if (list.size() % 2 != 0) {
-//            return list.size()+1;
-//        } else {
-//            return list.size();
-//        }
+
+
+
+return size;
+
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
         private TextView textView;
         private WebView webView;
+        private Button footerBtn;
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.show_text);
-//            webView = itemView.findViewById(R.id.web_test);
+            footerBtn = itemView.findViewById(R.id.btn_footer);
 
         }
     }
