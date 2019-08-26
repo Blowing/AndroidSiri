@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">AndroidSiri</string>
+    <string-array name="chat">
+        <item>你在说什么呢哈哈</item>
+        <item>白日依山尽，
+            黄河入海流，
+            欲穷千里目，
+            更上一层楼
+        </item>
+
+        <item>大分辨率图片（单维度超过 1000）大分辨率图片建议统一放在 xxhdpi 目录
+            下管理，否则将导致占用内存成倍数增加
+        </item>
+        <item>年后呀</item>
+        <item>呵呵呵呵呵呵呵呵呵呵呵呵呵打</item>
+        <item>手册下载地址：https://yq.aliyun.com/articles/69327</item>
+
+        <item>知否知否，应是女匪红手</item>
+        <item>德玛西亚德玛西亚哈哈哈哈</item>
+        <item>知否知否，应是女匪红手</item>
+        <item>德玛西亚德玛西亚哈哈哈哈</item>
+        <item>知否知否，应是女匪红手</item>
+        <item>德玛西亚德玛西亚哈哈哈哈</item>
+        <item>文字应该固 了</item>
+    </string-array>
 </resources>

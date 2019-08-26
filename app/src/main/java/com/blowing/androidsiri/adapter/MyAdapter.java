@@ -5,9 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 import com.blowing.androidsiri.R;
 
@@ -34,12 +32,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     }
 
     public int getListSize() {
-        return list.size();
+        return 50;
     }
     @NonNull
     @Override
     public MyAdapter.MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new MyHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_text, viewGroup, false));
+        return new MyHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_text, viewGroup,false));
 
     }
 
@@ -49,16 +47,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 //            myHolder.textView.setText(list.get(i));
 //        } else {
                     String html = " ";
-        html += "<head>";
-        html += "<body><a href=http://www.google.com>google home</a></body>";
-        html += "</head>";
-            myHolder.webView.setWebViewClient(new WebViewClient());
-            myHolder.webView.setWebChromeClient(new WebChromeClient());
-            myHolder.webView.getSettings().setJavaScriptEnabled(true);
-//           myHolder.webView.loadData(html, "text/html", "utf-8");
-            myHolder.webView.loadUrl("http://www.baidu.com");
+//        html += "<head>";
+//        html += "<body><a href=http://www.google.com>google home</a></body>";
+//        html += "</head>";
+//            myHolder.webView.setWebViewClient(new WebViewClient());
+//            myHolder.webView.setWebChromeClient(new WebChromeClient());
+//            myHolder.webView.getSettings().setJavaScriptEnabled(true);
+////           myHolder.webView.loadData(html, "text/html", "utf-8");
+//            myHolder.webView.loadUrl("http://www.baidu.com");
 
-//            myHolder.textView.setText("你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子你是瓜娃子");
+            myHolder.textView.setText("你是瓜娃子你是瓜");
 //        }
     }
 
@@ -66,11 +64,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
     @Override
     public int getItemCount() {
-        if (list.size() % 2 != 0) {
-            return list.size()+1;
-        } else {
-            return list.size();
-        }
+        return 50;
+//        if (list.size() % 2 != 0) {
+//            return list.size()+1;
+//        } else {
+//            return list.size();
+//        }
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
@@ -79,7 +78,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         public MyHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.show_text);
-            webView = itemView.findViewById(R.id.web_test);
+//            webView = itemView.findViewById(R.id.web_test);
 
         }
     }

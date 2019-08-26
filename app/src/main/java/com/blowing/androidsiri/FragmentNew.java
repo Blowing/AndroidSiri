@@ -32,7 +32,7 @@ public class FragmentNew extends Fragment {
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("http://www.baidu.com");
+
         return converView;
     }
 
@@ -41,5 +41,9 @@ public class FragmentNew extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Log.i("wuwu", "viewCreated");
+    }
+
+    public void loadUrl() {
+        webView.loadUrl("http://www.baidu.com");
     }
 }
